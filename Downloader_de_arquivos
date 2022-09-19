@@ -1,0 +1,60 @@
+from tokenize import Name
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome import options
+from selenium.webdriver.chrome.options import Options
+from time import sleep
+from tkinter import *
+from tkinter import messagebox
+
+janela_inicial = Tk()
+janela_inicial.title("PESQUISA DE ARQUIVOS")
+janela_inicial.geometry("400x300")
+janela_inicial.resizable(False, False)
+
+myvar = StringVar()
+
+lbl_titulo = Label(janela_inicial, font="Courier 20 bold italic", text="BAIXA ARQUIVOS")
+lbl_titulo.place(x=90, y=20)
+
+lbl_digita = Label(janela_inicial, font="Arial 12 bold", text="Nome do arquivo:")
+lbl_digita.place(x=30, y=80)
+
+entrada_busca = Entry(janela_inicial, font="Arial 12", width=22, textvariable=myvar)
+entrada_busca.place(x=170, y=80)
+
+def busca_arquivo():
+    valor_var = myvar.get()
+    if valor_var == "":
+        messagebox.showinfo("ALERTA", "Digite o nome do arquivo.")
+    elif valor_var == "macbeth":
+        options = Options()
+        options.headless = False
+        
+        navegador2 = webdriver.Chrome(options=options)
+
+        link = "https://pt.br1lib.org/"
+
+        navegador2.get(url=link)
+        sleep(1)
+
+        inputPesquisa = navegador2.find_element(by=By.ID, value='searchFieldx')
+        inputPesquisa.send_keys("macbeth")
+        sleep(1)
+        inputPesquisa.send_keys(Keys.RETURN)
+        sleep(1)
+
+        inputTITULO = navegador2.find_element(by=By.XPATH, value='//html/body/table/tbody/tr[2]/td/div/div/div/div[2]/div[4]/div/table/tbody/tr/td[2]/table/tbody/tr[1]/td/h3/a')
+        sleep(1)
+        inputTITULO.click()
+        sleep(1)
+
+        inputPDF = navegador2.find_element(by=By.XPATH, value='//html/body/table/tbody/tr[2]/td/div/div/div/div[2]/div[2]/div[1]/div[1]/div/a')
+        inputPDF.click()
+        sleep(300)
+
+btn_buscar = Button(janela_inicial, font="Arial 12 bold", text="BAIXAR", command=busca_arquivo, bd=10, bg="grey", fg="white", activeforeground="black", activebackground="white",             height=1, highlightcolor="purple", justify="right", padx=10, pady=10,                  relief="groove")
+btn_buscar.place(x=170, y=130)
+
+janela_inicial.mainloop()
